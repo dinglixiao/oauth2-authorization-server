@@ -1,12 +1,10 @@
 package com.example.oauth2.authorization.server.jackson2.deserializer;
 
-import com.example.oauth2.authorization.server.jpa.audit.AuditDeletedDate;
 import com.example.oauth2.authorization.server.jpa.entity.UserAuthority;
 import com.example.oauth2.authorization.server.jpa.entity.UserPrincipal;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
@@ -16,9 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserPrincipalDeserializer extends JsonDeserializer<UserPrincipal> {
-
-    private static final TypeReference<AuditDeletedDate> AUDIT_DELETED_DATE_OBJECT = new TypeReference<AuditDeletedDate>() {
-    };
 
     @Override
     public UserPrincipal deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
@@ -38,13 +33,8 @@ public class UserPrincipalDeserializer extends JsonDeserializer<UserPrincipal> {
         boolean accountNonLocked = readJsonNode(jsonNode, "accountNonLocked").asBoolean();
         final JsonNode auditNode = readJsonNode(jsonNode, "audit");
 
-        AuditDeletedDate auditDeletedDate = null;
-        if (!auditNode.isNull() || !auditNode.isMissingNode()) {
-            auditDeletedDate = mapper.readValue(auditNode.toString(), AUDIT_DELETED_DATE_OBJECT);
-        }
-
         UserPrincipal userPrincipal = new UserPrincipal(id, username, password, enabled, accountNonExpired, credentialsNonExpired,
-                accountNonLocked, userAuthorities, auditDeletedDate);
+                accountNonLocked, userAuthorities);
         if (passwordNode.asText(null) == null) {
             userPrincipal.eraseCredentials();
         }

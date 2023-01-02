@@ -2,11 +2,9 @@ package com.example.oauth2.authorization.server.configuration;
 
 import com.example.oauth2.authorization.server.configuration.federated.identity.FederatedIdentityConfigurer;
 import com.example.oauth2.authorization.server.configuration.jose.Jwks;
-import com.example.oauth2.authorization.server.jackson2.mixin.AuditDeletedDateMixin;
 import com.example.oauth2.authorization.server.jackson2.mixin.LongMixin;
 import com.example.oauth2.authorization.server.jackson2.mixin.UserAuthorityMixin;
 import com.example.oauth2.authorization.server.jackson2.mixin.UserPrincipalMixin;
-import com.example.oauth2.authorization.server.jpa.audit.AuditDeletedDate;
 import com.example.oauth2.authorization.server.jpa.entity.UserAuthority;
 import com.example.oauth2.authorization.server.jpa.entity.UserPrincipal;
 import com.example.oauth2.authorization.server.oauth2.authentication.OAuth2ResourceOwnerPasswordAuthenticationConverter;
@@ -130,7 +128,6 @@ public class AuthorizationServerConfiguration {
         // You will need to write the Mixin for your class so Jackson can marshall it.
         objectMapper.addMixIn(UserAuthority.class, UserAuthorityMixin.class);
         objectMapper.addMixIn(UserPrincipal.class, UserPrincipalMixin.class);
-        objectMapper.addMixIn(AuditDeletedDate.class, AuditDeletedDateMixin.class);
         objectMapper.addMixIn(Long.class, LongMixin.class);
 
         rowMapper.setObjectMapper(objectMapper);

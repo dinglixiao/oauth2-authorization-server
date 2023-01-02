@@ -1,6 +1,5 @@
 package com.example.oauth2.authorization.server.jpa.entity;
 
-import com.example.oauth2.authorization.server.jpa.audit.AuditDeletedDate;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -106,19 +105,16 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
     )
     private Set<UserAuthority> authorities = new HashSet<>();
 
-    @Embedded
-    private AuditDeletedDate audit = new AuditDeletedDate();
-
     public UserPrincipal() {
 
     }
 
     public UserPrincipal(Long id, String username, String password, Set<UserAuthority> authorities) {
-        this(id, username, password, true, true, true, true, authorities, null);
+        this(id, username, password, true, true, true, true, authorities);
     }
 
     public UserPrincipal(Long id, String username, String password, boolean enabled, boolean accountNonExpired,
-                         boolean credentialsNonExpired, boolean accountNonLocked, Set<UserAuthority> authorities, AuditDeletedDate audit) {
+                         boolean credentialsNonExpired, boolean accountNonLocked, Set<UserAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.hashedPassword = password;
@@ -127,7 +123,6 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
         this.credentialsNonExpired = credentialsNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.authorities = Collections.unmodifiableSet(authorities);
-        this.audit = audit;
     }
 
     public Long getId() {
@@ -208,14 +203,6 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public AuditDeletedDate getAudit() {
-        return audit;
-    }
-
-    public void setAudit(AuditDeletedDate audit) {
-        this.audit = audit;
     }
 
     @Override
